@@ -108,14 +108,7 @@ const cardVariants = {
     }),
 };
 
-const skillRowVariants = {
-    hidden: { opacity: 0, x: -16 },
-    visible: (i: number) => ({
-        opacity: 1,
-        x: 0,
-        transition: { duration: 0.35, delay: 0.15 + i * 0.07, ease: "easeOut" },
-    }),
-};
+
 
 // ─── Skill Icon ───────────────────────────────────────────────────────────────
 function SkillIcon({ skill }: { skill: Skill }) {
@@ -193,11 +186,10 @@ function CategoryCard({ category, index }: { category: Category; index: number }
                 {category.skills.map((skill, si) => (
                     <motion.div
                         key={skill.name}
-                        custom={si}
-                        variants={skillRowVariants}
-                        initial="hidden"
-                        whileInView="visible"
+                        initial={{ opacity: 0, x: -16 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
+                        transition={{ duration: 0.35, delay: 0.15 + si * 0.07, ease: "easeOut" }}
                         className="flex items-center gap-3 py-3"
                         style={{
                             borderBottom: si < category.skills.length - 1
