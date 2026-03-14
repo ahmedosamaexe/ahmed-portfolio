@@ -1,172 +1,158 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { GraduationCap, MapPin, Code2, Cpu } from "lucide-react";
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "./LanguageContext";
 
-const fadeUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: (i: number) => ({
-        opacity: 1,
-        y: 0,
-        transition: { delay: i * 0.12, duration: 0.6, ease: "easeOut" as const },
-    }),
-};
-
-const stats = [
-    { label: "Year", value: "3rd", sub: "CS Student" },
-    { label: "Focus", value: ".NET", sub: "Backend Eng." },
-    { label: "Specialty", value: "IoT", sub: "Systems" },
-    { label: "Grad.", value: "'27", sub: "Expected" },
-];
+gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
-    return (
-        <section id="about" className="relative py-28 bg-grid">
-            {/* Ambient */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[2px] bg-gradient-to-r from-transparent via-[rgba(0,245,255,0.3)] to-transparent" />
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const photoRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
-            <div className="max-w-6xl mx-auto px-6">
-                {/* Section header */}
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    variants={fadeUp}
-                    custom={0}
-                    className="mb-16 text-center"
-                >
-                    <span className="text-xs tracking-[0.3em] uppercase text-[#00f5ff] font-medium">About Me</span>
-                    <h2 className="font-heading text-4xl sm:text-5xl font-bold text-white mt-3">
-                        Engineered by Curiosity
-                    </h2>
-                </motion.div>
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      /* ── About container: border reveals ── */
+      const container = sectionRef.current?.querySelector(".about-container");
+      if (container) {
+        gsap.fromTo(container, { opacity: 0, scale: 0.97 }, {
+          opacity: 1, scale: 1, duration: 0.8, ease: "power2.out",
+          scrollTrigger: { trigger: container, start: "top 80%", once: true },
+        });
+      }
 
-                <div className="grid lg:grid-cols-2 gap-10 items-start">
-                    {/* Left — Bio */}
-                    <div className="space-y-5">
-                        {[
-                            {
-                                i: 1,
-                                text: "I'm Ahmed Osama, a 3rd-year Computer Science student at Menoufia National University specializing in Internet of Things. I build backend infrastructure — real-time data pipelines, socket servers, and REST APIs that power IoT environments.",
-                            },
-                            {
-                                i: 2,
-                                text: "My core focus is .NET backend engineering: designing ASP.NET Core services, architecting clean data layers with SQL Server, and implementing raw TCP/IP socket servers with custom communication protocols — no frameworks between me and the wire.",
-                            },
-                            {
-                                i: 3,
-                                text: "IoT specialization means I obsess over latency. When sensor data must reach the backend in milliseconds at scale, every abstraction layer is a liability. I engineer systems that are lean, reliable, and built to last.",
-                            },
-                        ].map(({ i, text }) => (
-                            <motion.p
-                                key={i}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                variants={fadeUp}
-                                custom={i}
-                                className="text-slate-400 leading-relaxed text-base"
-                            >
-                                {text}
-                            </motion.p>
-                        ))}
+      /* ── Photo: clip-path reveal from left ── */
+      if (photoRef.current) {
+        gsap.fromTo(photoRef.current,
+          { clipPath: "inset(0 100% 0 0)", scale: 1.1 },
+          {
+            clipPath: "inset(0 0% 0 0)", scale: 1,
+            duration: 1.1, ease: "power3.inOut",
+            scrollTrigger: { trigger: photoRef.current, start: "top 75%", once: true },
+          }
+        );
+      }
 
-                        {/* Stats row */}
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            variants={fadeUp}
-                            custom={4}
-                            className="grid grid-cols-4 gap-3 pt-4"
-                        >
-                            {stats.map(({ label, value, sub }) => (
-                                <div
-                                    key={label}
-                                    className="text-center py-4 px-2 rounded-xl glass border border-[rgba(0,245,255,0.1)] hover:border-[rgba(0,245,255,0.25)] transition-colors"
-                                >
-                                    <div className="font-heading text-2xl font-bold gradient-text">{value}</div>
-                                    <div className="text-[10px] text-[#00f5ff]/70 uppercase tracking-widest mt-0.5">{label}</div>
-                                    <div className="text-[11px] text-slate-500 mt-0.5">{sub}</div>
-                                </div>
-                            ))}
-                        </motion.div>
-                    </div>
+      /* ── Label ── */
+      const label = sectionRef.current?.querySelector(".about-label");
+      if (label) {
+        gsap.fromTo(label, { opacity: 0, y: 10 }, {
+          opacity: 1, y: 0, duration: 0.5,
+          scrollTrigger: { trigger: label, start: "top 85%", once: true },
+        });
+      }
 
-                    {/* Right — Education card + identity pills */}
-                    <div className="space-y-5">
-                        {/* Education card */}
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            variants={fadeUp}
-                            custom={2}
-                            className="relative glass border border-[rgba(0,245,255,0.15)] rounded-2xl p-6 hover:border-[rgba(0,245,255,0.3)] transition-all duration-300 card-glow overflow-hidden"
-                        >
-                            {/* Corner accent */}
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-[#00f5ff]/5 rounded-bl-[80px]" />
-                            <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-[rgba(0,245,255,0.1)] border border-[rgba(0,245,255,0.2)] flex items-center justify-center text-[#00f5ff] flex-shrink-0">
-                                    <GraduationCap size={22} />
-                                </div>
-                                <div>
-                                    <div className="font-heading font-semibold text-white text-base">
-                                        Menoufia National University
-                                    </div>
-                                    <div className="text-[#00f5ff] text-sm mt-0.5">Faculty of Computers & AI</div>
-                                    <div className="text-slate-400 text-sm mt-1">Internet of Things Department</div>
-                                    <div className="flex items-center gap-3 mt-3 flex-wrap">
-                                        <span className="px-3 py-1 rounded-full text-xs bg-[rgba(0,245,255,0.08)] text-[#00f5ff] border border-[rgba(0,245,255,0.2)]">
-                                            3rd Year
-                                        </span>
-                                        <span className="px-3 py-1 rounded-full text-xs bg-[rgba(0,102,255,0.08)] text-[#0066ff] border border-[rgba(0,102,255,0.2)]">
-                                            Graduating 2027
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
+      /* ── Text: split into lines, stagger ── */
+      if (textRef.current) {
+        const lines = textRef.current.querySelectorAll(".about-line");
+        gsap.set(lines, { y: 40, opacity: 0 });
+        gsap.to(lines, {
+          y: 0, opacity: 1, stagger: 0.12, duration: 0.7, ease: "power3.out",
+          scrollTrigger: { trigger: textRef.current, start: "top 78%", once: true },
+        });
+      }
 
-                        {/* Identity cards */}
-                        {[
-                            {
-                                icon: <Code2 size={18} />,
-                                title: "Backend .NET Engineer",
-                                desc: "Building robust, scalable server-side systems with ASP.NET, clean architecture patterns, and SQL/NoSQL databases.",
-                            },
-                            {
-                                icon: <Cpu size={18} />,
-                                title: "IoT Systems Specialist",
-                                desc: "Designing real-time telemetry pipelines, custom socket protocols, and device-to-cloud communication layers.",
-                            },
-                            {
-                                icon: <MapPin size={18} />,
-                                title: "Tanta, Gharbia, Egypt",
-                                desc: "Building globally, shipping remotely. Open to international remote opportunities.",
-                            },
-                        ].map(({ icon, title, desc }, idx) => (
-                            <motion.div
-                                key={title}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                variants={fadeUp}
-                                custom={idx + 3}
-                                className="flex items-start gap-4 glass border border-[rgba(255,255,255,0.06)] rounded-xl p-4 hover:border-[rgba(0,245,255,0.2)] transition-all duration-300"
-                            >
-                                <div className="w-9 h-9 rounded-lg bg-[rgba(0,245,255,0.08)] border border-[rgba(0,245,255,0.15)] flex items-center justify-center text-[#00f5ff] flex-shrink-0">
-                                    {icon}
-                                </div>
-                                <div>
-                                    <div className="font-heading font-semibold text-white text-sm">{title}</div>
-                                    <div className="text-slate-500 text-xs leading-relaxed mt-0.5">{desc}</div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
+      /* ── Giant CTA headline: word-by-word stagger with perspective ── */
+      if (headlineRef.current) {
+        const words = headlineRef.current.querySelectorAll(".headline-word");
+        gsap.set(words, { y: 100, opacity: 0, rotateX: 30 });
+        gsap.to(words, {
+          y: 0, opacity: 1, rotateX: 0,
+          stagger: 0.08, duration: 0.9, ease: "power4.out",
+          scrollTrigger: { trigger: headlineRef.current, start: "top 80%", once: true },
+        });
+      }
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div ref={sectionRef} style={{ background: "var(--black)" }}>
+      {/* About section — rounded border container */}
+      <section
+        id="about"
+        className="about-container"
+        style={{
+          margin: "0 40px", border: "0.5px solid var(--border-on-black)",
+          borderRadius: "24px", padding: "60px",
+          opacity: 0, willChange: "transform, opacity",
+        }}
+      >
+        <div style={{
+          display: "grid", gridTemplateColumns: "280px 1fr",
+          gap: "60px", alignItems: "start",
+        }}>
+          {/* Photo — clip-path reveal from left */}
+          <div
+            ref={photoRef}
+            style={{
+              width: "100%", aspectRatio: "1/1", overflow: "hidden", borderRadius: "8px",
+              clipPath: "inset(0 100% 0 0)", willChange: "clip-path, transform",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/avatar.jpg" alt="Ahmed Osama" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
+
+          {/* Text area */}
+          <div ref={textRef}>
+            <div style={{ display: "flex", gap: "40px", alignItems: "flex-start" }}>
+              <span className="about-label" style={{
+                fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase",
+                color: "var(--dim-on-black)", fontFamily: "monospace",
+                flexShrink: 0, paddingTop: "4px", opacity: 0,
+              }}>
+                {t.about.label}
+              </span>
+              <div>
+                <p className="about-line" style={{
+                  fontSize: "18px", lineHeight: 1.8,
+                  color: "rgba(232,230,223,0.75)", fontWeight: 400,
+                  opacity: 0, willChange: "transform, opacity",
+                }}>
+                  {t.about.p1}
+                </p>
+                <p className="about-line" style={{
+                  fontSize: "18px", lineHeight: 1.8,
+                  color: "rgba(232,230,223,0.75)", fontWeight: 400,
+                  marginTop: "20px", opacity: 0, willChange: "transform, opacity",
+                }}>
+                  {t.about.p2}
+                </p>
+              </div>
             </div>
-        </section>
-    );
+          </div>
+        </div>
+      </section>
+
+      {/* Giant CTA headline — word-by-word with perspective rotation */}
+      <div
+        ref={headlineRef}
+        style={{ padding: "80px 40px 40px", textAlign: "center", perspective: "800px" }}
+      >
+        <div className="giant-headline" style={{ overflow: "hidden" }}>
+          {t.about.headline1.split(" ").map((word, i) => (
+            <span key={i} className="headline-word inline-block" style={{
+              opacity: 0, marginRight: "0.25em", willChange: "transform, opacity",
+            }}>
+              {word}
+            </span>
+          ))}
+        </div>
+        <div className="giant-headline" style={{ overflow: "hidden" }}>
+          {t.about.headline2.split(" ").map((word, i) => (
+            <span key={i} className="headline-word inline-block" style={{
+              opacity: 0, marginRight: "0.25em", willChange: "transform, opacity",
+            }}>
+              {word}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }

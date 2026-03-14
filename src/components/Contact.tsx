@@ -1,152 +1,85 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Mail, Phone, Github, Linkedin, ArrowUpRight } from "lucide-react";
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "./LanguageContext";
 
-const contacts = [
-    {
-        icon: Mail,
-        label: "Email",
-        value: "ahmed4real9@gmail.com",
-        href: "mailto:ahmed4real9@gmail.com",
-        color: "#00f5ff",
-        desc: "Best for project inquiries",
-    },
-    {
-        icon: Phone,
-        label: "WhatsApp",
-        value: "+20 105 060 8122",
-        href: "https://wa.me/201050608122",
-        color: "#25D366",
-        desc: "Quick response guaranteed",
-    },
-    {
-        icon: Github,
-        label: "GitHub",
-        value: "github.com/ahmedosamaexe",
-        href: "https://github.com/ahmedosamaexe",
-        color: "#a78bfa",
-        desc: "Browse my open source work",
-    },
-    {
-        icon: Linkedin,
-        label: "LinkedIn",
-        value: "Ahmed Osama",
-        href: "https://www.linkedin.com/in/ahmed-osama-b4078b389",
-        color: "#0066ff",
-        desc: "Connect professionally",
-    },
-];
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
-    return (
-        <section id="contact" className="relative py-28 bg-[#03060e]">
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(0,102,255,0.3)] to-transparent" />
-            {/* Ambient */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[#00f5ff]/3 rounded-full blur-[100px] pointer-events-none" />
+  const cardRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
-            <div className="max-w-4xl mx-auto px-6">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center mb-6"
-                >
-                    <span className="text-xs tracking-[0.3em] uppercase text-[#00f5ff] font-medium">Contact</span>
-                    <h2 className="font-heading text-4xl sm:text-5xl font-bold text-white mt-3">
-                        Let&apos;s Build Something
-                    </h2>
-                </motion.div>
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (cardRef.current) {
+        gsap.fromTo(cardRef.current, { scale: 0.95, opacity: 0 }, {
+          scale: 1, opacity: 1, duration: 0.7, ease: "power2.out",
+          scrollTrigger: { trigger: cardRef.current, start: "top 85%", once: true },
+        });
+      }
+    });
+    return () => ctx.revert();
+  }, []);
 
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                    className="text-center text-slate-500 text-sm leading-relaxed max-w-xl mx-auto mb-14"
-                >
-                    I&apos;m a 3rd-year student passionate about backend systems and IoT. Whether it&apos;s a collaboration,
-                    internship opportunity, or just a technical conversation — I&apos;m always open to connect.
-                </motion.p>
+  const inputStyle: React.CSSProperties = {
+    width: "100%", background: "var(--input-bg)", border: "none",
+    borderRadius: "14px", padding: "18px 20px", fontSize: "15px",
+    color: "var(--text-on-black)", fontFamily: "monospace",
+    marginBottom: "14px", outline: "none",
+  };
 
-                {/* Contact cards */}
-                <div className="grid sm:grid-cols-2 gap-4 mb-12">
-                    {contacts.map(({ icon: Icon, label, value, href, color, desc }, i) => (
-                        <motion.a
-                            key={label}
-                            href={href}
-                            target={href.startsWith("http") ? "_blank" : undefined}
-                            rel="noopener noreferrer"
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: i * 0.1 }}
-                            className="group relative glass border border-[rgba(255,255,255,0.06)] rounded-2xl p-5 hover:border-[rgba(255,255,255,0.15)] transition-all duration-300 overflow-hidden block"
-                            whileHover={{ scale: 1.02, y: -2 }}
-                            whileTap={{ scale: 0.98 }}
-                            style={{
-                                boxShadow: "none",
-                            }}
-                            onMouseEnter={(e) => {
-                                (e.currentTarget as HTMLElement).style.boxShadow = `0 0 25px ${color}15, 0 0 50px ${color}08`;
-                                (e.currentTarget as HTMLElement).style.borderColor = `${color}35`;
-                            }}
-                            onMouseLeave={(e) => {
-                                (e.currentTarget as HTMLElement).style.boxShadow = "none";
-                                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.06)";
-                            }}
-                        >
-                            {/* Glow corner */}
-                            <div
-                                className="absolute -top-8 -right-8 w-24 h-24 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-                                style={{ backgroundColor: `${color}20` }}
-                            />
+  return (
+    <section
+      id="contact"
+      style={{ background: "var(--black)", padding: "0 40px 100px" }}
+    >
+      <div
+        ref={cardRef}
+        style={{
+          background: "var(--card-bg)", borderRadius: "24px",
+          padding: "52px", maxWidth: "580px", margin: "0 auto", opacity: 0,
+        }}
+      >
+        <h3 style={{
+          fontSize: "22px", fontWeight: 600, color: "var(--text-on-black)",
+          textAlign: "center", marginBottom: "32px",
+        }}>
+          {t.contact.heading}
+        </h3>
 
-                            <div className="relative z-10 flex items-start gap-4">
-                                <div
-                                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border transition-all duration-300"
-                                    style={{
-                                        backgroundColor: `${color}15`,
-                                        borderColor: `${color}30`,
-                                        color,
-                                    }}
-                                >
-                                    <Icon size={20} />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-xs text-slate-500 uppercase tracking-widest">{label}</span>
-                                        <ArrowUpRight
-                                            size={14}
-                                            className="text-slate-600 group-hover:text-slate-400 transition-colors"
-                                        />
-                                    </div>
-                                    <div className="font-heading font-semibold text-white text-sm mt-0.5 truncate">{value}</div>
-                                    <div className="text-xs text-slate-600 mt-0.5">{desc}</div>
-                                </div>
-                            </div>
-                        </motion.a>
-                    ))}
-                </div>
-
-                {/* Bottom divider line */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
-                    className="border-t border-[rgba(255,255,255,0.06)] pt-8 text-center"
-                >
-                    <p className="text-slate-600 text-xs">
-                        © {new Date().getFullYear()} Ahmed Osama — Built with Next.js 14, TypeScript &amp; Tailwind CSS
-                    </p>
-                    <p className="text-slate-700 text-xs mt-1">
-                        Tanta, Gharbia, Egypt — Open to remote &amp; international opportunities
-                    </p>
-                </motion.div>
-            </div>
-        </section>
-    );
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const form = e.target as HTMLFormElement;
+            const name = (form.elements.namedItem("name") as HTMLInputElement).value;
+            const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+            const message = (form.elements.namedItem("message") as HTMLTextAreaElement).value;
+            window.location.href = `mailto:ahmed4real9@gmail.com?subject=Portfolio Contact from ${name}&body=${encodeURIComponent(message)}%0A%0AFrom: ${name} (${email})`;
+          }}
+        >
+          <input name="name" type="text" required placeholder={t.contact.name} style={inputStyle} />
+          <input name="email" type="email" required placeholder={t.contact.email} style={inputStyle} />
+          <textarea
+            name="message" required placeholder={t.contact.message}
+            style={{ ...inputStyle, minHeight: "140px", resize: "vertical" }}
+          />
+          <button
+            type="submit"
+            style={{
+              width: "100%", background: "var(--cream)", color: "var(--black)",
+              fontWeight: 700, borderRadius: "14px", padding: "18px",
+              fontSize: "15px", letterSpacing: "0.05em", border: "none",
+              cursor: "pointer", transition: "opacity 200ms",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.85"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+          >
+            {t.contact.send}
+          </button>
+        </form>
+      </div>
+    </section>
+  );
 }

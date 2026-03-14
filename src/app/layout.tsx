@@ -1,38 +1,38 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Bebas_Neue, Inter, Cairo } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "@/components/LanguageContext";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas-neue",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: "400",
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700", "900"],
+});
+
+const cairo = Cairo({
+  variable: "--font-cairo",
+  subsets: ["arabic", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: "Ahmed Osama — Backend .NET Engineer & IoT Specialist",
-  description:
-    "Portfolio of Ahmed Osama, a 3rd-year Computer Science student specializing in Backend .NET Engineering and IoT Systems. Based in Tanta, Egypt.",
-  keywords: ["Ahmed Osama", ".NET Engineer", "IoT", "Backend Developer", "C#", "ASP.NET", "Portfolio"],
+  description: "Backend .NET Engineer specializing in ASP.NET Core, Clean Architecture, and IoT Systems. Based in Tanta, Egypt.",
+  keywords: ["Ahmed Osama", ".NET", "Backend", "IoT", "C#", "ASP.NET", "Portfolio"],
   authors: [{ name: "Ahmed Osama" }],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body
-        className={`${spaceGrotesk.variable} ${inter.variable} antialiased bg-[#020408] text-slate-200`}
-      >
-        {children}
+    <html lang="en" className={`${bebasNeue.variable} ${inter.variable} ${cairo.variable}`}>
+      <body style={{ background: "#dbd9d2" }}>
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

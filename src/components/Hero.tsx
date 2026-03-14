@@ -1,228 +1,220 @@
 "use client";
 
-import { useRef } from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { TypeAnimation } from "react-type-animation";
-import { Github, Linkedin, Mail, Phone, Download, ChevronDown } from "lucide-react";
-import dynamic from "next/dynamic";
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "./LanguageContext";
 
-const ParticlesBackground = dynamic(() => import("./ParticlesBackground"), { ssr: false });
-
-const socials = [
-    { icon: Github, href: "https://github.com/ahmedosamaexe", label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/ahmed-osama-b4078b389", label: "LinkedIn" },
-    { icon: Mail, href: "mailto:ahmed4real9@gmail.com", label: "Email" },
-    { icon: Phone, href: "https://wa.me/201050608122", label: "WhatsApp" },
-];
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
-    const scrollRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const nameRef = useRef<HTMLDivElement>(null);
+  const subtitleRef = useRef<HTMLSpanElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const arrowRef = useRef<HTMLDivElement>(null);
+  const taglineRef = useRef<HTMLDivElement>(null);
+  const photoRef = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
+  const { t, lang, toggleLang } = useLanguage();
 
-    const scrollDown = () => {
-        document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-    };
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      /* ── Text splitting: each letter animates up ── */
+      if (nameRef.current) {
+        const letters = nameRef.current.querySelectorAll(".hero-letter");
+        gsap.set(letters, { y: 120, opacity: 0, rotateX: 40 });
+        gsap.to(letters, {
+          y: 0, opacity: 1, rotateX: 0,
+          duration: 1.0, stagger: 0.035, ease: "power4.out", delay: 0.3,
+        });
+      }
 
-    return (
-        <section
-            id="hero"
-            className="relative flex min-h-screen items-center justify-center overflow-hidden bg-grid scan-overlay"
-        >
-            <ParticlesBackground />
+      /* ── Subtitle + Nav fade in ── */
+      if (subtitleRef.current) {
+        gsap.fromTo(subtitleRef.current, { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, delay: 0.6, ease: "power2.out" });
+      }
+      if (navRef.current) {
+        gsap.fromTo(navRef.current, { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, delay: 0.7, ease: "power2.out" });
+      }
 
-            {/* Ambient glow blobs */}
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5ff]/5 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-[#0066ff]/6 rounded-full blur-[100px] pointer-events-none" />
+      /* ── Arrow ── */
+      if (arrowRef.current) {
+        gsap.fromTo(arrowRef.current, { opacity: 0 }, { opacity: 1, duration: 0.6, delay: 1.0 });
+      }
 
-            <div className="relative z-10 max-w-6xl mx-auto px-6 pt-20 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                {/* Left — text */}
-                <div className="flex-1 text-center lg:text-left">
-                    {/* Greeting badge */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-[rgba(0,245,255,0.2)] text-xs font-medium text-[#00f5ff] mb-6 tracking-widest uppercase"
-                    >
-                        <span className="inline-block w-2 h-2 rounded-full bg-[#00f5ff] animate-pulse" />
-                        Available for opportunities
-                    </motion.div>
+      /* ── Tagline: words stagger up ── */
+      if (taglineRef.current) {
+        const words = taglineRef.current.querySelectorAll(".tagline-word");
+        gsap.set(words, { y: 30, opacity: 0 });
+        gsap.to(words, {
+          y: 0, opacity: 1, duration: 0.6, stagger: 0.04, ease: "power3.out", delay: 0.9,
+        });
+      }
 
-                    {/* Name — clean gradient */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="mb-4"
-                    >
-                        <h1
-                            className="font-heading font-bold text-5xl sm:text-6xl lg:text-7xl leading-tight"
-                            style={{
-                                background: "linear-gradient(100deg, #ffffff 30%, #00f5ff 100%)",
-                                WebkitBackgroundClip: "text",
-                                WebkitTextFillColor: "transparent",
-                                backgroundClip: "text",
-                            }}
-                        >
-                            Ahmed Osama
-                        </h1>
-                    </motion.div>
+      /* ── Photo: clip-path reveal ── */
+      if (photoRef.current) {
+        gsap.fromTo(photoRef.current,
+          { clipPath: "inset(100% 0 0 0)", scale: 1.1 },
+          { clipPath: "inset(0% 0 0 0)", scale: 1, duration: 1.2, delay: 0.8, ease: "power3.inOut" }
+        );
+      }
 
-                    {/* Typing title */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                        className="h-14 flex items-center justify-center lg:justify-start mb-6"
-                    >
-                        <div className="font-heading text-2xl sm:text-3xl font-medium">
-                            <span className="text-slate-400">I build&nbsp;</span>
-                            <TypeAnimation
-                                sequence={[
-                                    "Backend .NET Engineer",
-                                    2800,
-                                    "IoT Systems Specialist",
-                                    2800,
-                                ]}
-                                wrapper="span"
-                                cursor={true}
-                                repeat={Infinity}
-                                className="gradient-text"
-                            />
-                        </div>
-                    </motion.div>
+      /* ── Right info ── */
+      if (rightRef.current) {
+        gsap.fromTo(rightRef.current, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, delay: 1.0, ease: "power2.out" });
+      }
 
-                    {/* Bio */}
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.55 }}
-                        className="text-slate-400 text-base lg:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0 mb-8"
-                    >
-                        3rd-year CS student at{" "}
-                        <span className="text-[#00f5ff] font-medium">Menoufia National University</span>
-                        {" "}specializing in IoT. I build real-time backends, TCP socket servers,
-                        and device-to-cloud data pipelines using C# and .NET.
-                    </motion.p>
+      /* ── Parallax: hero content moves up on scroll ── */
+      if (sectionRef.current) {
+        gsap.to(sectionRef.current.querySelector(".hero-inner"), {
+          y: -80, ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current, start: "top top",
+            end: "bottom top", scrub: true,
+          },
+        });
+      }
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
 
-                    {/* CTA buttons */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.7 }}
-                        className="flex flex-wrap gap-4 justify-center lg:justify-start mb-8"
-                    >
-                        <motion.a
-                            href="/cv.pdf"
-                            download
-                            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#00f5ff] text-[#020408] font-heading font-semibold text-sm hover:bg-white transition-all duration-200"
-                            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(0,245,255,0.4)" }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            <Download size={16} />
-                            Download CV
-                        </motion.a>
-                        <motion.button
-                            onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-                            className="flex items-center gap-2 px-6 py-3 rounded-xl border border-[rgba(0,245,255,0.3)] text-[#00f5ff] font-heading font-semibold text-sm hover:bg-[rgba(0,245,255,0.08)] transition-all duration-200"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            View Projects
-                        </motion.button>
-                    </motion.div>
+  const renderName = (text: string) =>
+    text.split("").map((ch, i) => (
+      <span
+        key={i}
+        className="hero-letter inline-block"
+        style={{ opacity: 0, willChange: "transform, opacity", perspective: "600px" }}
+      >
+        {ch === " " ? "\u00A0" : ch}
+      </span>
+    ));
 
-                    {/* Social icons */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.85 }}
-                        className="flex gap-3 justify-center lg:justify-start"
-                    >
-                        {socials.map(({ icon: Icon, href, label }) => (
-                            <motion.a
-                                key={label}
-                                href={href}
-                                target={href.startsWith("http") ? "_blank" : undefined}
-                                rel="noopener noreferrer"
-                                aria-label={label}
-                                className="w-10 h-10 rounded-lg glass border border-[rgba(0,245,255,0.15)] flex items-center justify-center text-slate-400 hover:text-[#00f5ff] hover:border-[rgba(0,245,255,0.4)] transition-all duration-200"
-                                whileHover={{ scale: 1.15, y: -2 }}
-                                whileTap={{ scale: 0.9 }}
-                            >
-                                <Icon size={18} />
-                            </motion.a>
-                        ))}
-                    </motion.div>
-                </div>
+  const renderTaglineWords = (text: string) =>
+    text.split(" ").map((word, i) => (
+      <span key={i} className="tagline-word inline-block" style={{ marginRight: "0.3em", opacity: 0 }}>
+        {word}
+      </span>
+    ));
 
-                {/* Right — Avatar */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8, x: 40 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                    className="flex-shrink-0 relative"
-                    ref={scrollRef}
-                >
-                    {/* Spinning ring */}
-                    <div className="absolute inset-0 rounded-full border-2 border-dashed border-[rgba(0,245,255,0.15)] spin-slow -inset-6" />
-                    {/* Static outer ring */}
-                    <div className="absolute -inset-3 rounded-full border border-[rgba(0,245,255,0.25)]" />
-
-                    <div className="relative w-64 h-64 sm:w-72 sm:h-72 float-animation">
-                        {/* Glow background */}
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#00f5ff]/20 to-[#0066ff]/20 blur-xl" />
-                        <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-[rgba(0,245,255,0.3)] pulse-glow">
-                            <Image
-                                src="/avatar.jpg"
-                                alt="Ahmed Osama"
-                                fill
-                                className="object-cover"
-                                priority
-                            />
-                        </div>
-
-                        {/* Floating badge — location */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 1, duration: 0.5 }}
-                            className="absolute -right-4 top-6 glass border border-[rgba(0,245,255,0.2)] rounded-xl px-3 py-2 text-xs font-medium text-[#00f5ff] whitespace-nowrap"
-                        >
-                            📍 Tanta, Egypt
-                        </motion.div>
-
-                        {/* Floating badge — status */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 1.2, duration: 0.5 }}
-                            className="absolute -left-4 bottom-8 glass border border-[rgba(0,102,255,0.3)] rounded-xl px-3 py-2 text-xs font-medium text-[#0066ff] whitespace-nowrap"
-                        >
-                            🎓 3rd Year CS
-                        </motion.div>
-                    </div>
-                </motion.div>
-            </div>
-
-            {/* Scroll indicator */}
-            <motion.button
-                onClick={scrollDown}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5, duration: 0.5 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-500 hover:text-[#00f5ff] transition-colors group"
-                whileHover={{ scale: 1.1 }}
-                aria-label="Scroll down"
+  return (
+    <section
+      id="hero"
+      ref={sectionRef}
+      className="relative overflow-hidden"
+      style={{ background: "var(--cream)", minHeight: "100vh" }}
+    >
+      {/* NAV */}
+      <nav className="absolute top-0 left-0 right-0 z-30" style={{ padding: "28px 40px" }}>
+        <div className="flex items-center justify-between">
+          <span
+            ref={subtitleRef}
+            style={{ fontSize: "14px", fontWeight: 400, color: "var(--text-on-cream)", opacity: 0 }}
+          >
+            {t.subtitle}
+          </span>
+          <div ref={navRef} className="hidden md:flex items-center" style={{ gap: "28px", opacity: 0 }}>
+            {(["services", "works", "about", "contact"] as const).map((id) => (
+              <button
+                key={id}
+                onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })}
+                style={{
+                  fontSize: "14px", fontWeight: 400, color: "var(--text-on-cream)", background: "none",
+                  border: "none", cursor: "pointer", transition: "opacity 200ms",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.4"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+              >
+                {t.nav[id]}
+              </button>
+            ))}
+            <button
+              onClick={toggleLang}
+              style={{
+                fontSize: "14px", fontWeight: 500, color: "var(--text-on-cream)", background: "none",
+                border: "none", cursor: "pointer", transition: "opacity 200ms",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.4"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
             >
-                <span className="text-xs tracking-widest uppercase font-medium">Scroll</span>
-                <motion.div
-                    animate={{ y: [0, 6, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                    <ChevronDown size={20} />
-                </motion.div>
-            </motion.button>
-        </section>
-    );
+              {lang === "en" ? "AR" : "EN"}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* MAIN */}
+      <div className="hero-inner" style={{ paddingTop: "80px", willChange: "transform" }}>
+        {/* Giant name — ONE LINE */}
+        <div ref={nameRef} style={{ padding: "0 40px", overflow: "hidden" }}>
+          <div className="hero-name-line">{renderName("AHMED OSAMA")}</div>
+        </div>
+
+        {/* Arrow */}
+        <div ref={arrowRef} style={{
+          fontSize: "24px", color: "var(--dim-on-cream)", marginTop: "24px",
+          padding: "0 40px", opacity: 0,
+        }}>
+          ↘
+        </div>
+
+        {/* Bottom row */}
+        <div
+          className="flex flex-col md:flex-row items-end justify-between"
+          style={{ padding: "20px 40px 40px", gap: "32px" }}
+        >
+          {/* Left: tagline + niche quote + CTA */}
+          <div ref={taglineRef} style={{ maxWidth: "380px" }}>
+            <p style={{ fontSize: "16px", lineHeight: 1.6, color: "rgba(26,26,26,0.65)", overflow: "hidden" }}>
+              {renderTaglineWords(t.hero.tagline)}
+            </p>
+            <p style={{
+              fontSize: "14px", fontStyle: "italic", color: "rgba(26,26,26,0.45)", marginTop: "12px",
+              opacity: 0,
+            }}
+              className="tagline-word"
+            >
+              &ldquo;{t.hero.nicheQuote}&rdquo;
+            </p>
+            <button
+              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+              className="pill-btn tagline-word"
+              style={{ marginTop: "24px", opacity: 0 }}
+            >
+              {t.hero.cta}
+            </button>
+          </div>
+
+          {/* Center: photo — clip-path reveal */}
+          <div
+            ref={photoRef}
+            style={{
+              width: "280px", aspectRatio: "3/4", flexShrink: 0, overflow: "hidden",
+              borderRadius: "12px", clipPath: "inset(100% 0 0 0)", willChange: "clip-path, transform",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/avatar.jpg" alt="Ahmed Osama" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
+
+          {/* Right: badge + MAR'26 */}
+          <div ref={rightRef} style={{ textAlign: "right", opacity: 0 }}>
+            <div style={{
+              fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase",
+              color: "var(--dim-on-cream)", fontFamily: "monospace",
+            }}>
+              {t.hero.availableBadge}
+            </div>
+            <div style={{
+              fontFamily: "var(--font-bebas-neue), Bebas Neue, sans-serif",
+              fontSize: "clamp(56px, 7vw, 90px)", fontWeight: 400,
+              color: "var(--text-on-cream)", letterSpacing: "-0.03em", lineHeight: 1, marginTop: "4px",
+            }}>
+              MAR&apos;26
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
