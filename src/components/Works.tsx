@@ -1,229 +1,174 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLanguage } from "./LanguageContext";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface Project {
-  number: string;
-  title: string;
-  type: string;
-  tags: string[];
-  github: string;
-  video: string;
-}
-
-const projects: Project[] = [
+const projects = [
   {
-    number: "01",
+    id: "01",
     title: "TaskManager API",
-    type: "REST API · 2024",
-    tags: ["BACKEND", "2024"],
-    github: "https://github.com/ahmedosamaexe/task-manager-api",
-    video: "/project1.mp4",
+    category: "REST API Architecture",
+    year: "2024",
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop",
+    link: "https://github.com/ahmedosamaexe/task-manager-api",
   },
   {
-    number: "02",
+    id: "02",
     title: "Python Chat Engine",
-    type: "TCP/IP · 2024",
-    tags: ["BACKEND", "2024"],
-    github: "https://github.com/ahmedosamaexe/python-chat-app",
-    video: "/project2.mp4",
+    category: "TCP/IP Networking",
+    year: "2024",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2070&auto=format&fit=crop",
+    link: "https://github.com/ahmedosamaexe/python-chat-app",
   },
+  {
+    id: "03",
+    title: "IoT Data Pipeline",
+    category: "Real-time Processing",
+    year: "2023",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop",
+    link: "#",
+  }
 ];
 
 export default function Works() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { lang } = useLanguage();
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      /* ── Title words stagger ── */
-      const titleWords = sectionRef.current?.querySelectorAll(".works-title-word");
-      if (titleWords?.length) {
-        gsap.set(titleWords, { y: 100, opacity: 0 });
-        gsap.to(titleWords, {
-          y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: "power4.out",
-          scrollTrigger: { trigger: sectionRef.current, start: "top 75%", once: true },
-        });
+    if (!sectionRef.current) return;
+
+    // Title reveal
+    gsap.fromTo(
+      sectionRef.current.querySelector(".works-title"),
+      { y: "100%", opacity: 0 },
+      {
+        y: "0%",
+        opacity: 1,
+        duration: 0.8,
+        ease: "expo.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+        }
       }
+    );
 
-      /* ── Description fade ── */
-      const desc = sectionRef.current?.querySelector(".works-desc");
-      if (desc) {
-        gsap.fromTo(desc, { y: 30, opacity: 0 }, {
-          y: 0, opacity: 1, duration: 0.7, ease: "power2.out",
-          scrollTrigger: { trigger: desc, start: "top 85%", once: true },
-        });
-      }
+    const projectCards = sectionRef.current.querySelectorAll(".project-card");
 
-      /* ── Each project card ── */
-      const cards = sectionRef.current?.querySelectorAll(".work-card");
-      cards?.forEach((card) => {
-        const num = card.querySelector(".work-number");
-        const videoWrap = card.querySelector(".video-reveal");
-        const info = card.querySelector(".work-info");
+    projectCards.forEach((card) => {
+      const imageContainer = card.querySelector(".image-container");
+      const image = card.querySelector(".parallax-image");
+      const info = card.querySelector(".project-info");
 
-        /* Giant number: parallax scrub */
-        if (num) {
-          gsap.to(num, {
-            y: -100, ease: "none",
-            scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: 1.5 },
-          });
+      // Reveal Image Container
+      gsap.fromTo(
+        imageContainer,
+        { clipPath: "inset(100% 0% 0% 0%)" },
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 1.2,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 75%",
+          }
         }
+      );
 
-        /* Video: clip-path reveal (curtain from bottom) */
-        if (videoWrap) {
-          gsap.fromTo(videoWrap,
-            { clipPath: "inset(100% 0 0 0)", scale: 1.08 },
-            {
-              clipPath: "inset(0% 0 0 0)", scale: 1,
-              duration: 1.2, ease: "power3.inOut",
-              scrollTrigger: { trigger: videoWrap, start: "top 80%", once: true },
-            }
-          );
+      // Parallax effect on image
+      gsap.fromTo(
+        image,
+        { y: "-15%" },
+        {
+          y: "15%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: card,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          }
         }
+      );
 
-        /* Info: slide up */
-        if (info) {
-          gsap.fromTo(info, { y: 40, opacity: 0 }, {
-            y: 0, opacity: 1, duration: 0.7, ease: "power2.out",
-            scrollTrigger: { trigger: info, start: "top 90%", once: true },
-          });
+      // Reveal info
+      gsap.fromTo(
+        info,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+          }
         }
-      });
-    }, sectionRef);
-    return () => ctx.revert();
+      );
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
   }, []);
 
-  const renderTitleWords = (text: string) =>
-    text.split(" ").map((word, i) => (
-      <span key={i} className="works-title-word inline-block" style={{
-        opacity: 0, marginRight: "0.2em", willChange: "transform, opacity",
-      }}>
-        {word}
-      </span>
-    ));
-
   return (
-    <section
-      id="works"
-      ref={sectionRef}
-      style={{ background: "var(--black)", padding: "100px 40px 60px" }}
-    >
-      {/* Giant headline */}
-      <h2 className="section-giant-title" style={{ overflow: "hidden", marginBottom: "32px" }}>
-        {renderTitleWords(lang === "ar" ? "أعمال مختارة /" : "SELECTED WORKS/")}
-      </h2>
+    <section ref={sectionRef} id="works" className="relative w-full py-24 md:py-40 bg-black text-white px-6 sm:px-12 md:px-24 overflow-hidden">
+      <div className="w-full max-w-7xl mx-auto">
 
-      <div className="works-desc" style={{
-        display: "flex", gap: "24px", alignItems: "flex-start",
-        marginBottom: "80px", flexWrap: "wrap", opacity: 0,
-      }}>
-        <span style={{
-          fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase",
-          color: "var(--dim-on-black)", fontFamily: "monospace",
-        }}>
-          ({lang === "ar" ? "المشاريع" : "PROJECTS"})
-        </span>
-        <p style={{
-          fontSize: "16px", lineHeight: 1.7, color: "var(--muted-on-black)", maxWidth: "400px",
-        }}>
-          {lang === "ar"
-            ? "مشاريع مبنية بعناية تعكس مهاراتي في بناء أنظمة باك إند حقيقية."
-            : "Thoughtfully crafted backend systems that blend clean architecture with real-world performance demands."}
-        </p>
-      </div>
+        <div className="overflow-hidden mb-20 md:mb-32">
+          <h2 className="works-title text-[10vw] md:text-[8vw] font-bold leading-[0.9] tracking-tighter uppercase origin-bottom">
+            Selected Works
+          </h2>
+        </div>
 
-      {/* Project cards */}
-      {projects.map((project, i) => (
-        <div
-          key={i}
-          className="work-card"
-          style={{
-            position: "relative", minHeight: "70vh",
-            display: "flex", alignItems: "center",
-            padding: "60px 0",
-            borderBottom: "0.5px solid var(--border-on-black)",
-            overflow: "hidden",
-          }}
-        >
-          {/* Giant number — left */}
-          <div
-            className="work-number"
-            style={{
-              position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)",
-              willChange: "transform",
-            }}
-          >
-            <span className="project-number">{project.number}</span>
-          </div>
-
-          {/* Right: video + info */}
-          <div style={{ marginLeft: "auto", width: "55%", maxWidth: "680px" }}>
-            {/* Video reveal — clip-path curtain */}
+        <div className="flex flex-col gap-32 md:gap-48">
+          {projects.map((project, index) => (
             <a
-              href={project.github}
+              key={index}
+              href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="video-reveal block"
-              style={{
-                width: "100%", aspectRatio: "16/10",
-                overflow: "hidden", cursor: "pointer",
-                borderRadius: "16px",
-                clipPath: "inset(100% 0 0 0)",
-                willChange: "clip-path, transform",
-              }}
+              className="project-card group block relative"
+              data-cursor="view"
             >
-              <video
-                src={project.video}
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              />
-            </a>
+              {/* Project Image Container */}
+              <div className="image-container relative w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden bg-[#111]">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="parallax-image object-cover scale-[1.1] group-hover:scale-[1.15] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  sizes="(max-width: 768px) 100vw, 80vw"
+                  priority={index === 0}
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
+              </div>
 
-            {/* Info below video */}
-            <div className="work-info" style={{
-              display: "flex", alignItems: "flex-end",
-              justifyContent: "space-between", marginTop: "20px", gap: "16px",
-              opacity: 0, willChange: "transform, opacity",
-            }}>
-              <div>
-                <div style={{
-                  fontFamily: "monospace", fontSize: "13px",
-                  letterSpacing: "0.1em", color: "rgba(232,230,223,0.4)", marginBottom: "6px",
-                }}>
-                  {project.type}
+              {/* Project Info */}
+              <div className="project-info mt-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-3xl md:text-5xl font-bold tracking-tight mb-2">
+                    {project.title}
+                  </h3>
+                  <p className="text-gray text-lg">{project.category}</p>
                 </div>
-                <div style={{
-                  fontSize: "28px", fontWeight: 700,
-                  color: "var(--text-on-black)", letterSpacing: "-0.02em",
-                }}>
-                  {project.title}
+
+                <div className="flex items-center gap-6 text-gray font-mono text-sm tracking-widest">
+                  <span>{project.id}</span>
+                  <span className="w-12 h-[1px] bg-border" />
+                  <span>{project.year}</span>
                 </div>
               </div>
-              <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
-                {project.tags.map((tag) => (
-                  <span key={tag} style={{
-                    border: "1px solid rgba(232,230,223,0.2)", borderRadius: "999px",
-                    padding: "5px 14px", fontSize: "11px",
-                    color: "rgba(232,230,223,0.5)", letterSpacing: "0.05em",
-                  }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
+            </a>
+          ))}
         </div>
-      ))}
+
+      </div>
     </section>
   );
 }

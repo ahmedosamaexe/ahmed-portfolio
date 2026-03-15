@@ -1,186 +1,62 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;900&family=Cairo:wght@300;400;500;600;700&display=swap");
-@import "lenis/dist/lenis.css";
 @import "tailwindcss";
 
-/* ═══════ COLOR SYSTEM (exact from Zuned) ═══════ */
-
 :root {
-  --cream: #dbd9d2;
-  --black: #0a0a0a;
-  --text-on-cream: #1a1a1a;
-  --text-on-black: #e8e6df;
-  --muted-on-cream: rgba(26, 26, 26, 0.45);
-  --muted-on-black: rgba(232, 230, 223, 0.5);
-  --dim-on-cream: rgba(26, 26, 26, 0.4);
-  --dim-on-black: rgba(232, 230, 223, 0.35);
-  --border-on-cream: rgba(26, 26, 26, 0.12);
-  --border-on-black: rgba(232, 230, 223, 0.12);
-  --card-bg: #1a1a1a;
-  --input-bg: #2a2a2a;
-  --hamburger-bg: rgba(219, 217, 210, 0.85);
+  --black: #000000;
+  --white: #ffffff;
+  --gray: #707070;
+  --border: #1a1a1a;
 }
-
-@theme inline {
-  --font-heading: "Bebas Neue", sans-serif;
-  --font-body: "Inter", sans-serif;
-  --font-arabic: "Cairo", sans-serif;
-}
-
-/* ═══════ BASE ═══════ */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: "Inter", sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--cream);
+  background: var(--black);
+  color: var(--white);
 }
 
-[dir="rtl"] body,
-[dir="rtl"] * { font-family: "Cairo", "Inter", sans-serif; }
-
 ::selection {
-  background: rgba(26, 26, 26, 0.15);
-  color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 /* ═══════ SCROLLBAR — hidden ═══════ */
 ::-webkit-scrollbar { width: 0px; }
 
-/* ═══════ GIANT SECTION TITLE (WHAT I DO / SELECTED WORKS /) ═══════ */
-.section-giant-title {
-  font-family: "Bebas Neue", sans-serif;
-  font-size: clamp(60px, 9vw, 140px);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 0.95;
-  color: var(--text-on-black);
-}
-
-/* ═══════ SERVICE NAME ═══════ */
-.service-name {
-  font-family: "Inter", sans-serif;
-  font-size: clamp(32px, 4vw, 56px);
-  font-weight: 700;
-  color: var(--text-on-black);
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-}
-
-/* ═══════ SUB ITEM (big bold) ═══════ */
-.sub-item-text {
-  font-family: "Inter", sans-serif;
-  font-size: clamp(18px, 2vw, 28px);
-  font-weight: 700;
-  color: var(--text-on-black);
-  letter-spacing: -0.01em;
-}
-
-/* ═══════ PROJECT NUMBER (huge bg) ═══════ */
-.project-number {
-  font-family: "Bebas Neue", sans-serif;
-  font-size: clamp(180px, 24vw, 360px);
-  font-weight: 400;
-  color: rgba(180, 180, 180, 0.25);
-  line-height: 0.85;
-  user-select: none;
-}
-
-/* ═══════ GIANT CTA HEADLINE ═══════ */
-.giant-headline {
-  font-family: "Bebas Neue", sans-serif;
-  font-size: clamp(70px, 11vw, 170px);
-  font-weight: 400;
-  color: var(--text-on-black);
-  letter-spacing: -0.03em;
-  line-height: 0.92;
-}
-
-/* ═══════ HERO GIANT NAME ═══════ */
-.hero-name-line {
-  font-family: "Bebas Neue", sans-serif;
-  font-size: clamp(80px, 13vw, 200px);
-  font-weight: 400;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
-  color: var(--text-on-cream);
-  white-space: nowrap;
-  width: 100%;
-}
-
-/* ═══════ CONTACT PILL BUTTON ═══════ */
-.pill-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--text-on-cream);
-  color: var(--cream);
-  padding: 16px 32px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-decoration: none;
-  border: 1.5px solid transparent;
-  cursor: pointer;
-  transition: all 250ms;
-}
-.pill-btn:hover {
-  background: transparent;
-  border-color: var(--text-on-cream);
-  color: var(--text-on-cream);
-}
-
-/* ═══════ HAMBURGER CIRCLE (cream/beige) ═══════ */
-.hamburger-circle {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--hamburger-bg);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 200ms;
-  color: var(--text-on-cream);
-  font-size: 20px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-}
-.hamburger-circle:hover { background: rgba(219, 217, 210, 1); }
-
-/* ═══════ SCROLL TO TOP (large beige circle) ═══════ */
-.scroll-top-btn {
+/* GRAIN TEXTURE OVERLAY */
+.grain-overlay {
   position: fixed;
-  bottom: 32px;
-  right: 40px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: rgba(180, 178, 170, 0.5);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  color: var(--text-on-cream);
-  transition: background 200ms;
-  z-index: 40;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
-.scroll-top-btn:hover { background: rgba(180, 178, 170, 0.7); }
 
-/* ═══════ SKILLS GIANT LEFT TEXT ═══════ */
-.skills-giant-left {
-  font-family: "Bebas Neue", sans-serif;
-  font-size: clamp(50px, 7vw, 120px);
-  font-weight: 400;
-  color: rgba(232, 230, 223, 0.12);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+/* LENIS SMOOTH SCROLL */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
