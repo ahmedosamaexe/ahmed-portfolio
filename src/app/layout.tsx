@@ -1,25 +1,16 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter, Cairo } from "next/font/google";
+import "@fontsource/geist-sans/100.css";
+import "@fontsource/geist-sans/200.css";
+import "@fontsource/geist-sans/300.css";
+import "@fontsource/geist-sans/400.css";
+import "@fontsource/geist-sans/500.css";
+import "@fontsource/geist-sans/600.css";
+import "@fontsource/geist-sans/700.css";
+import "@fontsource/geist-sans/800.css";
+import "@fontsource/geist-sans/900.css";
 import "./globals.css";
-import { LanguageProvider } from "@/components/LanguageContext";
-
-const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas-neue",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "900"],
-});
-
-const cairo = Cairo({
-  variable: "--font-cairo",
-  subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
+import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
+import { CustomCursor } from "@/components/CustomCursor";
 
 export const metadata: Metadata = {
   title: "Ahmed Osama — Backend .NET Engineer & IoT Specialist",
@@ -30,9 +21,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${bebasNeue.variable} ${inter.variable} ${cairo.variable}`}>
-      <body style={{ background: "#dbd9d2" }}>
-        <LanguageProvider>{children}</LanguageProvider>
+    <html lang="en">
+      <body className="bg-black text-white selection:bg-white/20 selection:text-white antialiased" style={{ fontFamily: '"Geist Sans", sans-serif' }}>
+        <CustomCursor />
+        <SmoothScrollProvider>
+          {children}
+        </SmoothScrollProvider>
       </body>
     </html>
   );
