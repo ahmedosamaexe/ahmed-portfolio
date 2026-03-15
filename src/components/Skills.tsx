@@ -3,8 +3,6 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLanguage } from "./LanguageContext";
-
 gsap.registerPlugin(ScrollTrigger);
 
 interface SkillColumn {
@@ -32,7 +30,6 @@ const columns: SkillColumn[] = [
 
 export default function Skills() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { lang } = useLanguage();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -118,7 +115,7 @@ export default function Skills() {
               willChange: "clip-path, opacity",
             }}
           >
-            {lang === "ar" ? "المهارات" : "Skills"}
+            Skills
           </h2>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "40px" }}>

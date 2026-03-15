@@ -1,8 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
-
-type Language = "en" | "ar";
+import { createContext, useContext, type ReactNode } from "react";
 
 interface Translations {
   subtitle: string;
@@ -112,114 +110,15 @@ const en: Translations = {
   },
 };
 
-const ar: Translations = {
-  subtitle: "مهندس باك إند .NET وأنظمة إنترنت الأشياء",
-  nav: { services: "الخدمات", works: "الأعمال", about: "عنّي", contact: "تواصل" },
-  hero: {
-    tagline: "أبني أنظمة باك إند سريعة وموثوقة تُشغّل بيئات IoT الحقيقية — متاح للعمل عن بُعد.",
-    nicheQuote: "أنا لا أستدعي الـ API فقط — أنا أبني ما تحته.",
-    cta: "تواصل ↗",
-    availableBadge: "متاح للعمل",
-  },
-  services: {
-    items: [
-      {
-        number: "(01)",
-        title: "ASP.NET Core Backend",
-        description: "من REST APIs إلى Middleware pipelines، أبني حلول باك إند كاملة. Clean Architecture و Dependency Injection و Background Services و JWT auth — بمستوى إنتاج من اليوم الأول.",
-        subs: [
-          "Clean Architecture · SOLID · Repository Pattern",
-          "JWT Auth · Middleware · Background Services",
-          "Swagger / OpenAPI · EF Core · SQL Server",
-        ],
-      },
-      {
-        number: "(02)",
-        title: "أنظمة لحظية ومنخفضة المستوى",
-        description: "أبني سيرفرات سوكت وأنابيب بيانات لحظية من الصفر. أعرف ماذا يفعل Kestrel و SignalR من الداخل — لأنني بدّلتهم بـ TCP خام قبل استخدامهم.",
-        subs: [
-          "TCP/IP Socket Servers · Custom Protocols",
-          "Real-Time Data Pipelines · IoT Integration",
-          "Non-blocking I/O · Concurrent Connections",
-        ],
-      },
-      {
-        number: "(03)",
-        title: "هندسة الأنظمة",
-        description: "كل نظام أبنيه يعكس قرار هيكلي. SOLID و CQRS/MediatR و Clean Code كممارسة يومية — مش مصطلحات مقابلات.",
-        subs: [
-          "SOLID Principles · Design Patterns",
-          "CQRS / MediatR · Clean Code",
-          "REST API Design · Domain-Driven thinking",
-        ],
-      },
-    ],
-  },
-  skills: { label: "(المهارات)" },
-  works: { label: "(الأعمال)" },
-  about: {
-    label: "(عنّي)",
-    p1: "أنا أحمد أسامة، طالب سنة ثالثة علوم حاسب في جامعة المنوفية الأهلية متخصص في IoT، تخرج 2027. أبني أنظمة باك إند بـ .NET — ASP.NET Core APIs و Clean Architecture و أنابيب بيانات لحظية و Background Services مبنية لمتطلبات بيئات IoT.",
-    p2: "أبني أنظمة باك إند من فترة كافية عشان يكون عندي آراء قوية عن أشياء معظم المهندسين بيتجاهلوها — ليه ترتيب الـ middleware مهم، ليه DI lifetime قرار معماري، ليه Background Service ما يجبش يحتفظ بحالة. بنيت سيرفر TCP/IP chat من الصفر قبل ما أستخدم SignalR. احتجت أعرف الـ abstraction بيخبي إيه.",
-    headline1: "لنبني",
-    headline2: "شيئاً معاً",
-  },
-  contact: {
-    heading: "عندك مشروع في بالك؟",
-    name: "اسمك",
-    email: "بريدك الإلكتروني",
-    message: "احكي لي عن مشروعك أو الفرصة",
-    send: "إرسال ←",
-  },
-  footer: {
-    menuLabel: "القائمة",
-    socialsLabel: "التواصل",
-    menuLinks: ["الرئيسية", "الخدمات", "الأعمال", "عنّي", "تواصل"],
-    socialLinks: [
-      { label: "لينكدإن", href: "https://www.linkedin.com/in/ahmed-osama-b4078b389" },
-      { label: "جيتهاب", href: "https://github.com/ahmedosamaexe" },
-      { label: "واتساب", href: "https://wa.me/201050608122" },
-    ],
-    localTime: "التوقيت المحلي",
-  },
-};
-
-const translations: Record<Language, Translations> = { en, ar };
-
 interface LanguageContextType {
-  lang: Language;
   t: Translations;
-  toggleLang: () => void;
 }
 
-const LanguageContext = createContext<LanguageContextType>({
-  lang: "en",
-  t: en,
-  toggleLang: () => {},
-});
+const LanguageContext = createContext<LanguageContextType>({ t: en });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Language>("en");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("portfolio-lang") as Language | null;
-    if (stored === "ar" || stored === "en") {
-      setLangState(stored);
-      document.documentElement.dir = stored === "ar" ? "rtl" : "ltr";
-      document.documentElement.lang = stored;
-    }
-  }, []);
-
-  const toggleLang = useCallback(() => {
-    const next = lang === "en" ? "ar" : "en";
-    setLangState(next);
-    localStorage.setItem("portfolio-lang", next);
-    document.documentElement.dir = next === "ar" ? "rtl" : "ltr";
-    document.documentElement.lang = next;
-  }, [lang]);
-
   return (
-    <LanguageContext.Provider value={{ lang, t: translations[lang], toggleLang }}>
+    <LanguageContext.Provider value={{ t: en }}>
       {children}
     </LanguageContext.Provider>
   );

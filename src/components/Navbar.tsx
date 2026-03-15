@@ -5,7 +5,7 @@ import { useLanguage } from "./LanguageContext";
 const sectionIds = ["services", "works", "about", "contact"];
 
 export default function Navbar() {
-  const { t, lang, toggleLang } = useLanguage();
+  const { t } = useLanguage();
   const labels = [t.nav.services, t.nav.works, t.nav.about, t.nav.contact];
 
   const scrollTo = (id: string) => {
@@ -52,24 +52,6 @@ export default function Navbar() {
               {labels[i]}
             </button>
           ))}
-          <button
-            onClick={toggleLang}
-            style={{
-              fontSize: "15px",
-              fontWeight: 500,
-              color: "var(--text-on-cream)",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontFamily: "Inter, sans-serif",
-              transition: "opacity 200ms",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.5"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-            aria-label={`Switch to ${lang === "en" ? "Arabic" : "English"}`}
-          >
-            {lang === "en" ? "AR" : "EN"}
-          </button>
         </div>
       </div>
     </nav>

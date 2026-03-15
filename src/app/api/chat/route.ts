@@ -16,7 +16,7 @@ About Ahmed:
 - Contact: ahmed4real9@gmail.com | GitHub: ahmedosamaexe | LinkedIn: ahmed-osama-b4078b389 | WhatsApp: +20 105 060 8122
 - Philosophy: understand what's beneath the abstraction before using it
 
-Answer in the same language the user writes in (Arabic or English). Be concise, friendly, and technical when appropriate.`;
+Answer in English. Be concise, friendly, and technical when appropriate.`;
 
 interface ChatMessage {
   role: "user" | "assistant";

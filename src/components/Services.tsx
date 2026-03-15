@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -95,10 +95,10 @@ export default function Services() {
           fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase",
           color: "var(--dim-on-black)", fontFamily: "monospace", opacity: 0,
         }}>
-          ({lang === "ar" ? "الخدمات" : "SERVICES"})
+          (SERVICES)
         </span>
         <h2 className="section-giant-title" style={{ marginTop: "12px", overflow: "hidden" }}>
-          {renderTitleWords(lang === "ar" ? "ما أقدمه /" : "WHAT I DO /")}
+          {renderTitleWords("WHAT I DO /")}
         </h2>
       </div>
 

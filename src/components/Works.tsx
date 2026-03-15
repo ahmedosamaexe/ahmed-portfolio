@@ -3,8 +3,6 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLanguage } from "./LanguageContext";
-
 gsap.registerPlugin(ScrollTrigger);
 
 interface Project {
@@ -37,7 +35,6 @@ const projects: Project[] = [
 
 export default function Works() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { lang } = useLanguage();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -116,7 +113,7 @@ export default function Works() {
     >
       {/* Giant headline */}
       <h2 className="section-giant-title" style={{ overflow: "hidden", marginBottom: "32px" }}>
-        {renderTitleWords(lang === "ar" ? "أعمال مختارة /" : "SELECTED WORKS/")}
+        {renderTitleWords("SELECTED WORKS/")}
       </h2>
 
       <div className="works-desc" style={{
@@ -127,14 +124,12 @@ export default function Works() {
           fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase",
           color: "var(--dim-on-black)", fontFamily: "monospace",
         }}>
-          ({lang === "ar" ? "المشاريع" : "PROJECTS"})
+          (PROJECTS)
         </span>
         <p style={{
           fontSize: "16px", lineHeight: 1.7, color: "var(--muted-on-black)", maxWidth: "400px",
         }}>
-          {lang === "ar"
-            ? "مشاريع مبنية بعناية تعكس مهاراتي في بناء أنظمة باك إند حقيقية."
-            : "Thoughtfully crafted backend systems that blend clean architecture with real-world performance demands."}
+          Thoughtfully crafted backend systems that blend clean architecture with real-world performance demands.
         </p>
       </div>
 

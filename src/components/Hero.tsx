@@ -16,7 +16,7 @@ export default function Hero() {
   const taglineRef = useRef<HTMLDivElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
-  const { t, lang, toggleLang } = useLanguage();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -128,17 +128,6 @@ export default function Hero() {
                 {t.nav[id]}
               </button>
             ))}
-            <button
-              onClick={toggleLang}
-              style={{
-                fontSize: "14px", fontWeight: 500, color: "var(--text-on-cream)", background: "none",
-                border: "none", cursor: "pointer", transition: "opacity 200ms",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.4"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-            >
-              {lang === "en" ? "AR" : "EN"}
-            </button>
           </div>
         </div>
       </nav>
