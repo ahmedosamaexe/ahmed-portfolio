@@ -43,7 +43,7 @@ export function CustomCursor() {
       width: 20,
       height: 20,
       backgroundColor: "rgba(255, 255, 255, 1)",
-      mixBlendMode: "difference" as any,
+      mixBlendMode: "difference" as const,
     },
     hover: {
       x: mousePosition.x - 40,
@@ -51,7 +51,7 @@ export function CustomCursor() {
       width: 80,
       height: 80,
       backgroundColor: "rgba(255, 255, 255, 1)",
-      mixBlendMode: "difference" as any,
+      mixBlendMode: "difference" as const,
     },
     view: {
       x: mousePosition.x - 40,
@@ -59,7 +59,7 @@ export function CustomCursor() {
       width: 80,
       height: 80,
       backgroundColor: "rgba(255, 255, 255, 1)",
-      mixBlendMode: "normal" as any,
+      mixBlendMode: "normal" as const,
     }
   };
 
