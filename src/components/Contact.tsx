@@ -56,7 +56,7 @@ export default function Contact() {
             const name = (form.elements.namedItem("name") as HTMLInputElement).value;
             const email = (form.elements.namedItem("email") as HTMLInputElement).value;
             const message = (form.elements.namedItem("message") as HTMLTextAreaElement).value;
-            window.location.href = `mailto:ahmed4real9@gmail.com?subject=Portfolio Contact from ${name}&body=${encodeURIComponent(message)}%0A%0AFrom: ${name} (${email})`;
+            window.location.href = `mailto:ahmed4real9@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0A%0AFrom: ${encodeURIComponent(name)} (${encodeURIComponent(email)})`;
           }}
         >
           <input name="name" type="text" required placeholder={t.contact.name} style={inputStyle} />
